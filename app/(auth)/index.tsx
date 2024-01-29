@@ -3,8 +3,8 @@ import React from 'react'
 
 const LoginScreen = () => {
   return (
-    <View>
-      <Text>LoginScreen</Text>
+    <View className='h-full'>
+      <Text className='text-center'>LoginScreen</Text>
     </View>
   )
 }
