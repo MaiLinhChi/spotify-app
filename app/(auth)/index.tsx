@@ -1,11 +1,14 @@
+import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
-import { View, Text } from "react-native";
+import { Text, View } from "react-native";
 
 const LoginScreen = () => {
     return (
-        <View className="h-full">
-            <Text className="text-center">LoginScreen</Text>
-        </View>
+        <LinearGradient className="h-full" colors={["rgba(0,0,0,0.8)", "transparent"]}>
+            <View className="flex items-center justify-center">
+                <Text>LoginScreen</Text>
+            </View>
+        </LinearGradient>
     );
 };
 
