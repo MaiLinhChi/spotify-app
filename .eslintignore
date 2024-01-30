@@ -1,0 +1,6 @@
+.eslintrc.js
+babel.config.js
+expo-env.d.ts
+global.d.ts
+postcss.config.js
+tailwind.config.js
