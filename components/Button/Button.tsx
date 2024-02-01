@@ -5,10 +5,11 @@ interface ButtonProps {
     title: string;
     icon?: ReactNode;
     type?: string;
-    className?: string;
+    disabled?: boolean;
+    onPress?: () => void;
 }
 
-const Button = ({ title, icon, type, className, ...props }: ButtonProps) => {
+const Button = ({ title, icon, type, onPress, disabled }: ButtonProps) => {
     let classes = "";
     switch (type) {
         case "primary": {
@@ -16,13 +17,17 @@ const Button = ({ title, icon, type, className, ...props }: ButtonProps) => {
             break;
         }
         case "border": {
-            classes = "border border-text flex-row gap-x-3 bg-transparent";
+            classes = "border border-text flex-row bg-transparent";
             break;
         }
     }
     return (
-        <TouchableOpacity className={`items-center rounded-3xl p-3 ${classes}`} {...props}>
-            <View className="absolute">{icon ? icon : null}</View>
+        <TouchableOpacity
+            className={`w-full items-center rounded-3xl p-3 mt-4 ${classes}`}
+            onPress={onPress}
+            disabled={disabled}
+        >
+            <View className="absolute ml-5">{icon ? icon : null}</View>
             <Text className="text-sm font-bold text-white w-full text-center">{title}</Text>
         </TouchableOpacity>
     );
