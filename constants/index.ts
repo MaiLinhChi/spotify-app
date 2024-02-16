@@ -1,3 +1,5 @@
+import { Dispatch } from "react";
+
 export interface IiconProps {
     width?: number;
     height?: number;
@@ -13,7 +15,7 @@ interface Ifollowers {
     href: string | null;
     total: number;
 }
-interface IimagesSpotify {
+export interface IimagesSpotify {
     url: string;
     height: number;
     width: number;
@@ -30,9 +32,13 @@ export interface IprofileResponse {
 interface Ialbum {
     images: IimagesSpotify[];
     name: string;
+    release_date: string;
+    type: string;
 }
-interface Iartists {
+export interface Iartists {
     name: string;
+    id: string;
+    images: IimagesSpotify[];
 }
 export interface ItrackRecentlyPlayed {
     album: Ialbum;
@@ -40,18 +46,17 @@ export interface ItrackRecentlyPlayed {
     duration_ms: number;
     name: string;
 }
-interface IlikedSongs {
-    name: string;
-    type: string;
-}
+
 export interface IrecentlyPlayed {
-    played_at?: string;
-    track: ItrackRecentlyPlayed | IlikedSongs;
+    played_at: string;
+    track: ItrackRecentlyPlayed;
 }
 export interface IpropsRecentlyPlayed {
     data: IrecentlyPlayed;
 }
-
+export interface IpropsAlbum {
+    data: IAlbum;
+}
 interface IplayListItem {
     name: string;
     description: string;
@@ -70,4 +75,31 @@ export interface IpropsPlayList {
 
 export interface Props {
     children: string | JSX.Element | JSX.Element[];
+}
+
+export interface Istate {
+    loading: string;
+    profile: IprofileResponse;
+    playing: object;
+}
+
+export interface Iaction {
+    type: string;
+    payload: any;
+}
+
+export interface IStateGlbalContext {
+    loading: boolean;
+    profile: IprofileResponse;
+}
+
+export interface IGlobalContext {
+    state: IStateGlbalContext;
+    dispatch: Dispatch<any>;
+}
+
+export interface IAlbum {
+    name: string;
+    images: IimagesSpotify[];
+    artists: Iartists[];
 }

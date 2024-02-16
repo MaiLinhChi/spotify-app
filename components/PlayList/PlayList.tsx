@@ -5,9 +5,10 @@ import { View, Text, ScrollView, Image } from "react-native";
 import { IplayList, IpropsPlayList } from "@/constants";
 import { ACCESS_TOKEN_KEY } from "@/constants/key";
 import { GlobalContext } from "@/contexts/GlobalContext/GlobalContext";
+import { setLoading } from "@/contexts/GlobalContext/action";
 
 const PlayList: React.FC<IpropsPlayList> = ({ category_id }) => {
-    const { setLoading } = useContext(GlobalContext);
+    const { dispatch } = useContext(GlobalContext);
     const [playlist, setPlaylist] = useState<IplayList>({
         message: "",
         playlists: {
@@ -33,7 +34,7 @@ const PlayList: React.FC<IpropsPlayList> = ({ category_id }) => {
     };
 
     useEffect(() => {
-        setLoading(true);
+        dispatch(setLoading(true));
         getPlaylist(category_id);
     }, [category_id]);
     return (

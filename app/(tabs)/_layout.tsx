@@ -1,24 +1,19 @@
-import { FontAwesome } from "@expo/vector-icons";
+import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
-import React, { useContext } from "react";
-
-import Loading from "@/components/Loading";
-import { GlobalContext } from "@/contexts/GlobalContext/GlobalContext";
+import React from "react";
 
 const TabsLayout = () => {
-    const { loading } = useContext(GlobalContext);
     return (
         <>
-            {loading && <Loading />}
             <Tabs
                 screenOptions={{
                     headerShown: false,
                     tabBarStyle: {
                         backgroundColor: "#232526",
                         borderTopWidth: 0,
-                        overflow: "visible",
                     },
                 }}
+                sceneContainerStyle={{ backgroundColor: "#000000e6" }}
             >
                 <Tabs.Screen
                     name="home"
@@ -31,12 +26,12 @@ const TabsLayout = () => {
                     }}
                 />
                 <Tabs.Screen
-                    name="profile"
+                    name="your_library"
                     options={{
-                        title: "Profile",
+                        title: "Your Library",
                         tabBarActiveTintColor: "white",
                         tabBarIcon: ({ focused }) => (
-                            <FontAwesome name="user" size={24} color={focused ? "white" : "#9ca3af"} />
+                            <Ionicons name="library" size={24} color={focused ? "white" : "#9ca3af"} />
                         ),
                     }}
                 />

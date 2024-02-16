@@ -1,10 +1,21 @@
-import { SetStateAction, createContext, Dispatch } from "react";
+import { createContext } from "react";
 
-interface IMenuContext {
-    loading: boolean;
-    setLoading: Dispatch<SetStateAction<boolean>>;
-}
-export const GlobalContext = createContext<IMenuContext>({
-    loading: false,
-    setLoading: () => {},
+import { IGlobalContext } from "@/constants";
+
+export const GlobalContext = createContext<IGlobalContext>({
+    state: {
+        loading: false,
+        profile: {
+            id: "",
+            country: "",
+            display_name: "",
+            email: "",
+            followers: {
+                href: "",
+                total: 0,
+            },
+            images: [],
+        },
+    },
+    dispatch: () => {},
 });

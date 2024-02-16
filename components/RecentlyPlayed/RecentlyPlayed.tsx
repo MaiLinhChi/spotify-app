@@ -1,42 +1,94 @@
-import { AntDesign } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import React from "react";
-import { View, Text, Image, Dimensions } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Link } from "expo-router";
+import React, { useEffect, useState } from "react";
+import { Text, Image, Dimensions, View } from "react-native";
 
-import { IpropsRecentlyPlayed, ItrackRecentlyPlayed } from "@/constants";
+import { IrecentlyPlayed } from "@/constants";
+import { ACCESS_TOKEN_KEY } from "@/constants/key";
 
 const screenWidth = Dimensions.get("window").width;
 
-const RecentlyPlayed = ({ data }: IpropsRecentlyPlayed) => {
-    const render = () => {
-        const item = data.track as ItrackRecentlyPlayed;
-        if (item.album) {
-            return (
-                <>
-                    <Image src={item.album.images[0].url} className="w-12 h-12 rounded-l-md" />
-                    <Text className="text-white text-xs ml-2 w-[100px] font-bold" numberOfLines={2}>
-                        {item.name}
-                    </Text>
-                </>
-            );
-        } else {
-            return (
-                <>
-                    <LinearGradient
-                        colors={["#ee9ca7", "#ffdde1"]}
-                        className="w-12 h-12 rounded-l-md items-center justify-center"
-                    >
-                        <AntDesign name="heart" size={24} color="white" />
-                    </LinearGradient>
-                    <Text className="text-white text-xs ml-3 font-bold">{item.name}</Text>
-                </>
-            );
+const RecentlyPlayed = () => {
+    const [recentlyPlayed, setRecentlyPlayed] = useState<IrecentlyPlayed[]>([
+        {
+            played_at: "",
+            track: {
+                album: {
+                    images: [
+                        {
+                            url: "",
+                            height: 0,
+                            width: 0,
+                        },
+                    ],
+                    name: "",
+                    type: "",
+                    release_date: "",
+                },
+                artists: [
+                    {
+                        name: "",
+                        id: "",
+                        images: [
+                            {
+                                url: "",
+                                height: 0,
+                                width: 0,
+                            },
+                        ],
+                    },
+                ],
+                duration_ms: 0,
+                name: "",
+            },
+        },
+    ]);
+
+    const getRecentlyPlayed = async () => {
+        try {
+            const accessToken = await AsyncStorage.getItem(ACCESS_TOKEN_KEY);
+            const res = await fetch("https://api.spotify.com/v1/me/player/recently-played?limit=6", {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${accessToken?.slice(1).slice(0, -1)}`,
+                },
+            });
+
+            const recentlyPlayedResponse = await res.json();
+            setRecentlyPlayed(recentlyPlayedResponse.items);
+        } catch (error) {
+            console.log("Error to get profile with " + error);
         }
     };
+    useEffect(() => {
+        getRecentlyPlayed();
+    }, []);
     return (
-        <View className="flex-row items-center bg-text rounded-md" style={{ width: screenWidth / 2 - 16 }}>
-            {render()}
-        </View>
+        <>
+            {recentlyPlayed.map((item, index) => (
+                <Link
+                    push
+                    href={{
+                        pathname: "/detail",
+                        params: {
+                            id: item.track.artists[0].id,
+                            image: item.track.album.images[0].url,
+                            type: item.track.album.type,
+                            release_date: item.track.album.release_date,
+                            artist: item.track.artists[0].id,
+                        },
+                    }}
+                    key={index}
+                >
+                    <View className="flex-row items-center bg-text rounded-md" style={{ width: screenWidth / 2 - 16 }}>
+                        <Image src={item.track.album.images[0].url} className="w-12 h-12 rounded-l-md" />
+                        <Text className="text-white text-xs ml-2 w-[100px]" numberOfLines={2}>
+                            {item.track.name}
+                        </Text>
+                    </View>
+                </Link>
+            ))}
+        </>
     );
 };
 
